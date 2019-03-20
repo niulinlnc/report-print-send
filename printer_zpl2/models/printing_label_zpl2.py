@@ -42,7 +42,7 @@ class PrintingLabelZpl2(models.Model):
     component_ids = fields.One2many(
         comodel_name='printing.label.zpl2.component', inverse_name='label_id',
         string='Label Components',
-        help='Components which will be printed on the label.')
+        help='Components which will be printed on the label.', copy=True)
     restore_saved_config = fields.Boolean(
         string="Restore printer's configuration",
         help="Restore printer's saved configuration and end of each label ",
