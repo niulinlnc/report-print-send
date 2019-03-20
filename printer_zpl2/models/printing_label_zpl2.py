@@ -85,6 +85,9 @@ class PrintingLabelZpl2(models.Model):
             })
             data = safe_eval(component.data, eval_args) or ''
 
+            if data == 'component_not_show':
+                continue
+
             # Generate a list of elements if the component is repeatable
             for idx in range(
                     component.repeat_offset,
@@ -152,8 +155,11 @@ class PrintingLabelZpl2(models.Model):
                     })
             elif component.component_type == 'graphic':
                 image = component.graphic_image or data
-                pil_image = Image.open(io.BytesIO(
-                    base64.b64decode(image))).convert('RGB')
+                try:
+                    pil_image = Image.open(io.BytesIO(
+                        base64.b64decode(image))).convert('RGB')
+                except Exception:
+                    continue
                 if component.width and component.height:
                     pil_image = pil_image.resize(
                         (component.width, component.height))
